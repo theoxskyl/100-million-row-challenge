@@ -13,6 +13,7 @@ final class Parser
 
         $host    = 'https://stitcher.io';
         $hostLen = mb_strlen($host);
+        $dateLen = 10;
 
         $output = [];
         while (($line = fgets($fp)) !== false) {
@@ -30,18 +31,8 @@ final class Parser
                 continue;
             }
 
-            $tPos = strpos($rest, 'T');
-            if ($tPos === false) {
-                continue;
-            }
-
-            $date = substr($rest, 0, $tPos);
-
-            if (strncmp($url, $host, $hostLen) === 0) {
-                $url = substr($url, $hostLen);
-            } else {
-                $url = $url;
-            }
+            $date = substr($rest, 0, $dateLen);
+            $url = substr($url, $hostLen);
 
             if (!isset($output[$url])) {
                 $output[$url] = [];
