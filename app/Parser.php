@@ -8,6 +8,7 @@ final class Parser
 {
     public function parse(string $inputPath, string $outputPath): void
     {
+        // theoxskyl
         $fp = fopen($inputPath, 'r');
 
         $host    = 'https://stitcher.io';
