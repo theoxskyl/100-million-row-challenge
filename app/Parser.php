@@ -2,22 +2,19 @@
 
 namespace App;
 
-use Exception;
-
 final class Parser
 {
     public function parse(string $inputPath, string $outputPath): void
     {
-        // theoxskyl
+        // theoxskyl 
         $fp = fopen($inputPath, 'r');
 
         $host    = 'https://stitcher.io';
-        $hostLen = mb_strlen($host);
-        $dateLen = 10;
+        $hostLen = strlen($host);
 
         $output = [];
         while (($line = fgets($fp)) !== false) {
-            $line = rtrim($line, "\r\n");
+            //$line = rtrim($line, "\r\n");
 
             $pos = strpos($line, ',');
             if ($pos === false) {
@@ -31,18 +28,16 @@ final class Parser
                 continue;
             }
 
-            $date = substr($rest, 0, $dateLen);
-            $url = substr($url, $hostLen);
+            $date = substr($rest, 0, 10);
 
-            if (!isset($output[$url])) {
-                $output[$url] = [];
-            }
-
-            if (isset($output[$url][$date])) {
-                $output[$url][$date]++;
+            if (strncmp($url, $host, $hostLen) === 0) {
+                $url = substr($url, $hostLen);
             } else {
-                $output[$url][$date] = 1;
+                $url = $url;
             }
+
+            $output[$url] = $output[$url] ?? [];
+            $output[$url][$date] = ($output[$url][$date] ?? 0) + 1;
         }
 
         fclose($fp);
