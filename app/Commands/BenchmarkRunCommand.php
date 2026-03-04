@@ -419,6 +419,12 @@ final class BenchmarkRunCommand
         // Verify results
         $expectedPath = __DIR__ . '/../../data/real-data-expected.json';
 
+        if (!is_file($actualPath)) {
+            $this->prError($prNumber, "No file actual found");
+            $this->githubComment($prNumber, "Benchmarking failed: no parsed results were stored");
+            return null;
+        }
+
         $actual = @file_get_contents($actualPath);
         $expected = @file_get_contents($expectedPath);
 
